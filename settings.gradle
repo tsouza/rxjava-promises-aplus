@@ -1,0 +1,6 @@
+rootProject.name = 'rxjava-promises'
+
+include 'rxjava-promises-api'
+
+include 'rxjava-promises-core'
+

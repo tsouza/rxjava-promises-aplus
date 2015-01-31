@@ -1,0 +1,8 @@
+version = '0.0.1-SNAPSHOT'
+
+apply plugin: "osgi"
+
+dependencies {
+    compile project(":rxjava-promises-api")
+    compile "io.reactivex:rxjava:1.0.4"
+}

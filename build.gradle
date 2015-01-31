@@ -1,0 +1,15 @@
+version = '1'
+
+subprojects {
+    apply plugin: 'java'
+
+    group = "com.github.tsouza.promises"
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
