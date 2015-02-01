@@ -49,4 +49,4 @@ This library is based on [Daryl Teo's rxjava-promises](https://github.com/darylt
 
 ## LICENSE
 
-Code and documentation released under [The MIT License (MIT)](blob/master/LICENSE).
+Code and documentation released under [The MIT License (MIT)](LICENSE).
