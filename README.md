@@ -27,7 +27,7 @@ dependency {
 }
 ```
 
-Then import *Promises* class and start using it. See the [examples project](https://github.com/tsouza/rxjava-promises-aplus/tree/master/rxjava-promises-examples).
+Then import *Promises* class and start using it. See the [examples project](https://github.com/tsouza/rxjava-promises-aplus/tree/master/rxjava-promises-example).
 
 ## Building
 
