@@ -2,15 +2,14 @@ package com.github.tsouza.promises.internal;
 
 import com.github.tsouza.promises.Promise;
 import com.github.tsouza.promises.PromiseOrValue;
-import com.github.tsouza.promises.Promises;
 import com.github.tsouza.promises.Value;
-import com.github.tsouza.promises.functions.*;
+import com.github.tsouza.promises.functions.Callable;
+import com.github.tsouza.promises.functions.Mapper;
+import com.github.tsouza.promises.functions.Receiver;
+import com.github.tsouza.promises.functions.Spread;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.Future;
-
-import static com.github.tsouza.promises.Promises.resolve;
 
 public class RxPromiseAdapter<R> implements Promise<R> {
 
