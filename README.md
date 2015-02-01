@@ -9,7 +9,7 @@ A *promise* represents the eventual result of an asynchronous operation. This li
 
 There is no official release (yet) of the library. You'll need to build it first.
 
-First, add the core module to your project.
+After building and installing in local repository, add the core module to your project.
 
 Example for Maven:
 ```xml
