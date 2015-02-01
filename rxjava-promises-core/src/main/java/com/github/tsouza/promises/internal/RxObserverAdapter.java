@@ -8,6 +8,8 @@ import rx.Observer;
 import rx.functions.*;
 import rx.subjects.ReplaySubject;
 
+import java.util.concurrent.Future;
+
 import static com.github.tsouza.promises.internal.RxObserverAdapter.State.*;
 
 public class RxObserverAdapter<R> implements Observer<R> {
@@ -49,6 +51,10 @@ public class RxObserverAdapter<R> implements Observer<R> {
         return reason;
     }
 
+    public Future<R> toFuture() {
+        return observable.toBlocking().toFuture();
+    }
+
     public void fulfill(R result) {
         subject.onNext(result);
         subject.onCompleted();
@@ -64,6 +70,10 @@ public class RxObserverAdapter<R> implements Observer<R> {
 
     public <NR> RxObserverAdapter<NR> then(OnFulfilled<R, NR> onFulfilled) {
         return then(onFulfilled, null, null);
+    }
+
+    public <NR> RxObserverAdapter<NR> then(OnFulfilled<R, NR> onFulfilled, OnRejected<NR> onRejected) {
+        return then(onFulfilled, onRejected, null);
     }
 
     public <NR> RxObserverAdapter<NR> fail(OnRejected<NR> onRejected) {

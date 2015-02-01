@@ -4,13 +4,11 @@ import com.github.tsouza.promises.Promise;
 import com.github.tsouza.promises.PromiseOrValue;
 import com.github.tsouza.promises.Promises;
 import com.github.tsouza.promises.Value;
-import com.github.tsouza.promises.functions.Callable;
-import com.github.tsouza.promises.functions.Mapper;
-import com.github.tsouza.promises.functions.Receiver;
-import com.github.tsouza.promises.functions.Spread;
+import com.github.tsouza.promises.functions.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import static com.github.tsouza.promises.Promises.resolve;
 
@@ -38,17 +36,20 @@ public class RxPromiseAdapter<R> implements Promise<R> {
     }
 
     @Override @SuppressWarnings("unchecked")
+    public <NR> Promise<NR> then(Mapper<R, PromiseOrValue<NR>> success, Mapper<Throwable, PromiseOrValue<R>> failure) {
+        return new RxPromiseAdapter<>(rxPromise.then(
+                (R r) -> chain(r, success),
+                (Throwable e) -> chain(e, failure)
+        ));
+    }
+
+    @Override @SuppressWarnings("unchecked")
     public <T extends Throwable> Promise<R> fail(Class<T> exceptionType, Mapper<T, PromiseOrValue<R>> mapper) {
         return new RxPromiseAdapter<>(rxPromise.fail((Throwable exception) -> {
             if (!exceptionType.isAssignableFrom(exception.getClass()))
                 return rxPromise;
             return chain((T) exception, mapper);
         }));
-    }
-
-    @Override
-    public Promise<R> fail(Mapper<Throwable, PromiseOrValue<R>> mapper) {
-        return fail(Throwable.class, mapper);
     }
 
     @Override @SuppressWarnings({"unchecked","rawtypes"})
@@ -69,29 +70,6 @@ public class RxPromiseAdapter<R> implements Promise<R> {
             return newPromise;
         }));
     }
-
-    @Override @SuppressWarnings("unchecked")
-    public <I, O> Promise<List<O>> map(Mapper<I, PromiseOrValue<O>> mapper) {
-        return then(success -> {
-            if (success == null) return null;
-            if (success instanceof Collection)
-                return Promises.map((Collection<Object>) success, mapper);
-            if (success instanceof Object[])
-                return Promises.map((Object[]) success, mapper);
-            throw new IllegalStateException(success.getClass() + " is not a collection (can not map it)");
-        });
-    }
-
-    @Override
-    public <NR> Promise<NR> yield(NR result) {
-        return then(success -> resolve(result));
-    }
-
-    @Override
-    public <NR> Promise<NR> yield(PromiseOrValue<NR> result) {
-        return then(success -> resolve(result));
-    }
-
     @Override
     public Promise<R> always(Callable<Promise<R>> callable) {
         return new RxPromiseAdapter<>(rxPromise.always(() -> {
@@ -128,7 +106,7 @@ public class RxPromiseAdapter<R> implements Promise<R> {
                                         spread.call(
                                                 (T1) safeGet(0, input),
                                                 (T2) safeGet(1, input),
-                                                (T3) safeGet(3, input))
+                                                (T3) safeGet(2, input))
                         )
         ));
     }
@@ -140,8 +118,8 @@ public class RxPromiseAdapter<R> implements Promise<R> {
                                         spread.call(
                                                 (T1) safeGet(0, input),
                                                 (T2) safeGet(1, input),
-                                                (T3) safeGet(3, input),
-                                                (T4) safeGet(4, input))
+                                                (T3) safeGet(2, input),
+                                                (T4) safeGet(3, input))
                         )
         ));
     }
@@ -153,9 +131,9 @@ public class RxPromiseAdapter<R> implements Promise<R> {
                                         spread.call(
                                                 (T1) safeGet(0, input),
                                                 (T2) safeGet(1, input),
-                                                (T3) safeGet(3, input),
-                                                (T4) safeGet(4, input),
-                                                (T5) safeGet(5, input))
+                                                (T3) safeGet(2, input),
+                                                (T4) safeGet(3, input),
+                                                (T5) safeGet(4, input))
                         )
         ));
     }
@@ -185,6 +163,11 @@ public class RxPromiseAdapter<R> implements Promise<R> {
         done(success, null);
     }
 
+    @Override
+    public Future<R> future() {
+        return rxPromise.toFuture();
+    }
+
     @SuppressWarnings({"rawtypes", "unchecked"})
     private <I> RxObserverAdapter chain(I input, Mapper<I, ?> mapper) {
         RxObserverAdapter newPromise = new RxObserverAdapter<>();
@@ -197,13 +180,11 @@ public class RxPromiseAdapter<R> implements Promise<R> {
         }
 
         if (promiseOrValue instanceof Promise)
-            ((Promise) promiseOrValue).done(newPromise::fulfill, newPromise::reject);
+            ((Promise<?>) promiseOrValue).done(newPromise::fulfill, newPromise::reject);
         else if (promiseOrValue instanceof Value)
             newPromise.fulfill(((Value) promiseOrValue).get());
-        else if (promiseOrValue == null)
-            newPromise.fulfill(null);
         else
-            newPromise.reject(new IllegalStateException("Illegal return type "+ promiseOrValue.getClass().getName()));
+            newPromise.fulfill(promiseOrValue);
 
         return newPromise;
     }

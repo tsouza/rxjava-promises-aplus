@@ -4,6 +4,7 @@ package com.github.tsouza.promises;
 import com.github.tsouza.promises.functions.Callable;
 import com.github.tsouza.promises.functions.Mapper;
 import com.github.tsouza.promises.functions.Receiver;
+import com.github.tsouza.promises.functions.Reducer;
 import com.github.tsouza.promises.spi.DeferredManager;
 
 import java.util.*;
@@ -11,19 +12,15 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class Promises {
 
-	public static <R> Promise<R> resolve() {
-		return resolve((Object) null);
-	}
-
 	@SuppressWarnings("unchecked")
-	public static <R> Promise<R> resolve(Object promiseOrValue) {
+	public static <R> Promise<R> resolve(R promiseOrValue) {
 		if (promiseOrValue instanceof PromiseOrValue)
 			return resolve((PromiseOrValue<R>) promiseOrValue);
-
-		return manager.resolved((R) promiseOrValue);
+		return manager().resolved(promiseOrValue);
 	}
 
 	public static <R> Promise<R> resolve(PromiseOrValue<R> promiseOrValue) {
@@ -69,7 +66,7 @@ public abstract class Promises {
 	}
 
 	public static <R> Promise<R> reject(Throwable exception) {
-		return manager.rejected(exception);
+		return manager().rejected(exception);
 	}
 	
 	public static <R> Promise<R> defer(Receiver<Resolver<R>> receiver) {
@@ -78,12 +75,12 @@ public abstract class Promises {
 
 	public static <R> Promise<R> defer(Receiver<Resolver<R>> receiver, ThreadProfile profile) {
 		Deferred<R> deferred = deferred();
-		manager.schedule(profile, receiver, deferred.resolver());
+		manager().schedule(profile, receiver, deferred.resolver());
 		return deferred.promise();
 	}
 	
 	public static <R> Deferred<R> deferred() {
-		return manager.deferred();
+		return manager().deferred();
 	}
 
 	public static <R> Promise<R> resolve(Callable<PromiseOrValue<R>> callback) {
@@ -117,9 +114,27 @@ public abstract class Promises {
 				i++;
 			}
 		});
-		
 	}
-	
+
+	public static <R> Promise<R> reduce(Object[] promisesOrValues, Reducer<R, PromiseOrValue<R>> reducer, R initialValue) {
+		return reduce(Arrays.asList(promisesOrValues), reducer, initialValue);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <R> Promise<R> reduce(Iterable<Object> promisesOrValues, Reducer<R, PromiseOrValue<R>> reducer, R initialValue) {
+		if (promisesOrValues == null)
+			return resolve(initialValue);
+		return reduceNext((Iterator<R>) promisesOrValues.iterator(), reducer, initialValue);
+	}
+
+	private static <R> Promise<R> reduceNext(Iterator<R> promisesOrValues, Reducer<R, PromiseOrValue<R>> reducer, R previousValue) {
+		if (!promisesOrValues.hasNext())
+			return resolve(previousValue);
+		return resolve(promisesOrValues.next()).
+				then(currentValue -> reducer.reduce(previousValue, (R) currentValue)).
+				then(nextValue -> reduceNext(promisesOrValues, reducer, nextValue));
+	}
+
 	public static <R> Promise<List<R>> join(Object... promisesOrValues) {
 		return all(promisesOrValues);
 	}
@@ -132,6 +147,16 @@ public abstract class Promises {
 		return map(promisesOrValues, Mapper.noop());
 	}
 
-	private static final DeferredManager manager = ServiceLoader.load(DeferredManager.class).
-			iterator().next();
+	private static DeferredManager manager() {
+		if (MANAGER == null)
+			MANAGER = ServiceLoader.load(DeferredManager.class).
+					iterator().next();
+		return MANAGER;
+	}
+
+	private static DeferredManager MANAGER;
+
+	private static interface ReduceNext<R> {
+		public Promise<R> reduce(R previousValue);
+	}
 }
