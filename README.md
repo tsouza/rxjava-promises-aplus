@@ -1,4 +1,4 @@
-# RxJava Promise Library for the JVM
+# RxJava Promises/A+ Library for the JVM
 
 A *promise* represents the eventual result of an asynchronous operation. This library provides a Promise/A+ like API for building callback-based applications. It's organized in 3 modules:
 * *[rxjava-promises-api](rxjava-promises-api)*: defines the Promises API.
@@ -45,7 +45,7 @@ For bugs, questions and discussions please use the [Github Issues](issues).
 
 ## Acknowledgements
 
-This library is based on @darylteo rxjava-promises. Thanks for the great work!
+This library is based on [Daryl Teo's rxjava-promises](https://github.com/darylteo/rxjava-promises). Thanks for the great work!
 
 ## LICENSE
 
