@@ -4,3 +4,5 @@ include 'rxjava-promises-api'
 
 include 'rxjava-promises-core'
 
+include 'rxjava-promises-example'
+
