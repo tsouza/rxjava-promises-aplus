@@ -21,7 +21,4 @@ buildscript {
 license {
     header rootProject.file('LICENSE')
     strictCheck true
-    ext.year = Calendar.getInstance().get(Calendar.YEAR)
-    ext.name = 'Thiago Souza'
-    ext.email = 'tcostasouza@gmail.com'
 }
