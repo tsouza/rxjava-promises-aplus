@@ -1,9 +1,9 @@
 # RxJava Promises/A+ Library for the JVM
 
 A *promise* represents the eventual result of an asynchronous operation. This library provides a Promise/A+ like API for building callback-based applications. It's organized in 3 modules:
-* *[rxjava-promises-api](rxjava-promises-api)*: defines the Promises API.
-* *[rxjava-promises-core](rxjava-promises-core)*: provides a @ReactiveX RxJava based implementation.
-* *[rxjava-promises-example](rxjava-promises-example)*: provides a few samples on how to use the library
+* *[rxjava-promises-api](https://github.com/tsouza/rxjava-promises-aplus/tree/master/rxjava-promises-api)*: defines the Promises API.
+* *[rxjava-promises-core](https://github.com/tsouza/rxjava-promises-aplus/tree/master/rxjava-promises-core)*: provides a @ReactiveX RxJava based implementation.
+* *[rxjava-promises-example](https://github.com/tsouza/rxjava-promises-aplus/tree/master/rxjava-promises-example)*: provides a few samples on how to use the library
 
 ## Getting Started
 
@@ -27,7 +27,7 @@ dependency {
 }
 ```
 
-Then import *Promises* class and start using it. See the [examples project](rxjava-promises-examples).
+Then import *Promises* class and start using it. See the [examples project](https://github.com/tsouza/rxjava-promises-aplus/tree/master/rxjava-promises-examples).
 
 ## Building
 
