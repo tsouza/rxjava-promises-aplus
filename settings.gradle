@@ -1,4 +1,4 @@
-rootProject.name = 'rxjava-promises'
+rootProject.name = 'rxjava-promises-aplus'
 
 include 'rxjava-promises-api'
 
