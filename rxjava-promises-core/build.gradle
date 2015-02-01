@@ -5,4 +5,7 @@ apply plugin: "osgi"
 dependencies {
     compile project(":rxjava-promises-api")
     compile "io.reactivex:rxjava:1.0.4"
+
+    testCompile "junit:junit:4.12"
+    testCompile "com.google.guava:guava:18.0"
 }
