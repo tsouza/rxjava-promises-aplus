@@ -3,6 +3,15 @@ version = '0.0.1-SNAPSHOT'
 apply plugin: "osgi"
 apply plugin: "license"
 
+jar {
+    manifest {
+        instruction "Require-Capability", "osgi.extender; filter:=\"(osgi.extender=osgi.serviceloader.registrar)\""
+        instruction "Provide-Capability", "osgi.serviceloader; osgi.serviceloader=com.github.tsouza.promises.spi.DeferredManager"
+        instruction "Export-Package", "!com.github.tsouza.promises.internal.*", "*"
+    }
+}
+
+
 dependencies {
     compile project(":rxjava-promises-api")
     compile "io.reactivex:rxjava:1.0.4"
