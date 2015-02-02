@@ -62,6 +62,10 @@ public class RxObserverAdapter<R> implements Observer<R> {
         return state == State.FULFILLED;
     }
 
+    public boolean isDone() {
+        return state != State.PENDING;
+    }
+
     public State getState() {
         return state;
     }
@@ -75,7 +79,7 @@ public class RxObserverAdapter<R> implements Observer<R> {
     }
 
     public Future<R> toFuture() {
-        return observable.toBlocking().toFuture();
+        return subject.toBlocking().toFuture();
     }
 
     public void fulfill(R result) {

@@ -32,7 +32,7 @@ import com.github.tsouza.promises.functions.Receiver;
 import com.github.tsouza.promises.functions.Spread;
 
 import java.util.Collection;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class RxPromiseAdapter<R> implements Promise<R> {
 
@@ -187,7 +187,9 @@ public class RxPromiseAdapter<R> implements Promise<R> {
 
     @Override
     public Future<R> future() {
-        return rxPromise.toFuture();
+        CountDownLatch latch = new CountDownLatch(1);
+        rxPromise.done(latch::countDown);
+        return new FutureAdapter(latch);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -223,4 +225,50 @@ public class RxPromiseAdapter<R> implements Promise<R> {
         return (array == null || idx > array.length) ? null : array[idx];
     }
 
+    class FutureAdapter implements Future<R> {
+        private final CountDownLatch latch;
+
+        public FutureAdapter(CountDownLatch latch) {
+            this.latch = latch;
+        }
+        @Override
+        public boolean isDone() {
+            return rxPromise.isDone();
+        }
+
+        @Override
+        public synchronized R get() throws InterruptedException, ExecutionException {
+            if (isDone())
+                return getResult();
+            latch.await();
+            return getResult();
+        }
+
+        @Override
+        public R get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+            if (isDone())
+                return getResult();
+            latch.await(timeout, unit);
+            return getResult();
+        }
+
+        @Override
+        public boolean cancel(boolean mayInterruptIfRunning) {
+            throw new UnsupportedOperationException("promises are not cancellable");
+        }
+
+        private R getResult() throws ExecutionException {
+            if (isDone()) {
+                if (rxPromise.getReason() != null)
+                    throw new ExecutionException(rxPromise.getReason());
+                return rxPromise.getResult();
+            }
+            return null;
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return false;
+        }
+    }
 }
