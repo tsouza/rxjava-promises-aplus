@@ -36,6 +36,8 @@ Then import *Promises* class and start using it. See the [examples project](http
 
 ## Building
 
+<a href="https://travis-ci.org/tsouza/rxjava-promises-aplus/builds"><img src="https://travis-ci.org/tsouza/rxjava-promises-aplus.svg?branch=master"></a>
+
 You'll need a Java 8 compatible JDK installed.
 
 To build:
