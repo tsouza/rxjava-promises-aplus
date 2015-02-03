@@ -2,6 +2,7 @@ version = '0.0.1-SNAPSHOT'
 
 apply plugin: "osgi"
 apply plugin: "license"
+apply plugin: "release"
 
 jar {
     manifest {
@@ -13,13 +14,18 @@ jar {
 
 buildscript {
     repositories {
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/groups/public" }
         jcenter()
     }
 
     dependencies {
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
+        classpath 'com.github.townsfolk:gradle-release:1.2'
     }
 }
+
+createReleaseTag.dependsOn uploadArchives
 
 license {
     header rootProject.file('LICENSE')
