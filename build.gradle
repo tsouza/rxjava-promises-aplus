@@ -50,6 +50,7 @@ subprojects {
                     pom.project {
                         name project.name
                         packaging 'jar'
+                        description 'RxJava Promises/A+ Library for the JVM'
                         url 'https://github.com/tsouza/rxjava-promises-aplus'
 
                         scm {
