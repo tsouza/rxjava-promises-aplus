@@ -2,12 +2,6 @@ version = "0.0.1-SNAPSHOT"
 
 apply plugin: "osgi"
 apply plugin: "license"
-apply plugin: "release"
-
-release {
-    releaseDryRun = true
-    scm = 'git'
-}
 
 jar {
     manifest {
@@ -28,13 +22,11 @@ dependencies {
 buildscript {
     repositories {
         mavenCentral()
-        maven { url 'http://maven.tmatesoft.com/content/repositories/releases/' }
         jcenter()
     }
 
     dependencies {
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
-        classpath 'au.com.ish.gradle:release:2.2.2'
     }
 }
 
