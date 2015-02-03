@@ -1,7 +1,5 @@
 apply from: 'http://tellurianring.com/projects/gradle-plugins/gradle-release/apply.groovy'
 
-createReleaseTag.dependsOn uploadArchives
-
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
