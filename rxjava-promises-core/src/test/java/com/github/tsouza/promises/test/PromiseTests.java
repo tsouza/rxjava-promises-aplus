@@ -203,6 +203,7 @@ public class PromiseTests {
         promise.done(fulfilled::set,
                 f -> fulfilled.set(false));
 
+        Thread.sleep(100);
         assertEquals(true, promise.future().get());
         assertEquals(true, fulfilled.get());
     }
