@@ -12,23 +12,35 @@ It's organized in 3 modules:
 
 ## Getting Started
 
-There is no official release (yet) of the library. You'll need to build it first.
-
-After building and installing in local repository, add the core module to your project.
+First, add Sonatype OSS repository and core module:
 
 Example for Maven:
 ```xml
-<dependency>
-    <groupId>com.github.tsouza.promises</groupId>
-    <artifactId>rxjava-promises-core</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-</dependency>
+<project>
+    <dependencies>
+        <dependency>
+            <groupId>com.github.tsouza.promises</groupId>
+            <artifactId>rxjava-promises-core</artifactId>
+            <version>1.0.0-rc.1</version>
+        </dependency>
+    </dependencies>
+    <repositories>
+        <repository>
+          <id>sonatype</id>
+          <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+    </repositories>
+</project>
 ```
 
 and for Gradle:
 ```groovy
+repositories {
+    mavenRepo urls: 'http://repository.sonatype.org/content/groups/public/'
+}
+
 dependency {
-    compile "com.github.tsouza.promises:rxjava-promises-core:0.0.1-SNAPSHOT"
+    compile "com.github.tsouza.promises:rxjava-promises-core:1.0.0-rc.1"
 }
 ```
 
