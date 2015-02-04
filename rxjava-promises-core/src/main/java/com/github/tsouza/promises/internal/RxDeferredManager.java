@@ -39,9 +39,9 @@ public class RxDeferredManager implements DeferredManager {
         return new RxDeferredAdapter<>();
     }
 
-    @Override
-    public <R> Promise<R> resolved(R value) {
-        return new RxPromiseAdapter<>(value);
+    @Override @SuppressWarnings({"unchecked", "rawtypes"})
+    public <R> Promise<R> resolved(Object value) {
+        return new RxPromiseAdapter(value);
     }
 
     @Override

@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class Promises {
 
 	@SuppressWarnings("unchecked")
-	public static <R> Promise<R> resolve(R promiseOrValue) {
+	public static <R> Promise<R> resolve(Object promiseOrValue) {
 		if (promiseOrValue instanceof PromiseOrValue)
 			return resolve((PromiseOrValue<R>) promiseOrValue);
 		return manager().resolved(promiseOrValue);
@@ -149,6 +149,7 @@ public abstract class Promises {
 		return reduceNext((Iterator<R>) promisesOrValues.iterator(), reducer, initialValue);
 	}
 
+    @SuppressWarnings("unchecked")
 	private static <R> Promise<R> reduceNext(Iterator<R> promisesOrValues, Reducer<R, PromiseOrValue<R>> reducer, R previousValue) {
 		if (!promisesOrValues.hasNext())
 			return resolve(previousValue);
@@ -178,7 +179,4 @@ public abstract class Promises {
 
 	private static DeferredManager MANAGER;
 
-	private static interface ReduceNext<R> {
-		public Promise<R> reduce(R previousValue);
-	}
 }
