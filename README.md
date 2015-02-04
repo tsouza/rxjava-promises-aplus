@@ -21,7 +21,7 @@ Example for Maven:
         <dependency>
             <groupId>com.github.tsouza.promises</groupId>
             <artifactId>rxjava-promises-core</artifactId>
-            <version>1.0.0-rc.1</version>
+            <version>1.0.0-rc.2</version>
         </dependency>
     </dependencies>
     <repositories>
@@ -40,7 +40,7 @@ repositories {
 }
 
 dependency {
-    compile "com.github.tsouza.promises:rxjava-promises-core:1.0.0-rc.1"
+    compile "com.github.tsouza.promises:rxjava-promises-core:1.0.0-rc.2"
 }
 ```
 
