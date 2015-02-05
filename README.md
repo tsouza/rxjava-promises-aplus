@@ -56,7 +56,7 @@ To build:
 ```
 $ git clone http://github.com/tsouza/rxjava-promises-aplus
 $ cd rxjava-promises-aplus
-$ ./gradlew install
+$ ./gradlew build
 ```
 
 ## Bugs and Feedback
