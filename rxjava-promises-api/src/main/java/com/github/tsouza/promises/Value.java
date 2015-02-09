@@ -23,16 +23,6 @@
  */
 package com.github.tsouza.promises;
 
-public class Value<R> implements PromiseOrValue<R> {
-	
-	private final R value;
-
-	public Value(R value) {
-		this.value = value;
-	}
-
-	public R get() {
-		return value;
-	}
-	
+public interface Value<R> extends PromiseOrValue<R> {
+	public R get();
 }

@@ -83,8 +83,8 @@ public abstract class Promises {
 		return resolve(future, ThreadProfile.IO, timeout, unit);
 	}
 
-	public static <R> PromiseOrValue<R> value(R value) {
-		return new Value<>(value);
+	public static <R> Value<R> value(R value) {
+		return () -> value;
 	}
 
 	public static <R> Promise<R> reject(Throwable exception) {
