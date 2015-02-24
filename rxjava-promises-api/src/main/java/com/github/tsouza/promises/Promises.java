@@ -172,8 +172,9 @@ public abstract class Promises {
 
 	private static DeferredManager manager() {
 		if (MANAGER == null)
-			MANAGER = ServiceLoader.load(DeferredManager.class).
-					iterator().next();
+			MANAGER = ServiceLoader.load(DeferredManager.class,
+                        DeferredManager.class.getClassLoader()).
+                    iterator().next();
 		return MANAGER;
 	}
 

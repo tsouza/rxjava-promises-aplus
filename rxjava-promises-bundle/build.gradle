@@ -1,0 +1,22 @@
+apply plugin: "osgi"
+
+jar {
+    manifest {
+        instruction "Export-Package", "!com.github.tsouza.promises.internal.*", "*;version=$version"
+        instruction "Import-Package", "rx.*"
+    }
+}
+
+task makeBundle(type: Copy) {
+    from { configurations.compile.collect { zipTree(it)  } }
+    into "$buildDir/classes/main"
+}
+
+jar.dependsOn makeBundle
+
+dependencies {
+    compile project(":rxjava-promises-api")
+    compile(project(":rxjava-promises-core")) {
+        exclude module: "rxjava"
+    }
+}

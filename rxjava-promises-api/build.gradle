@@ -1,13 +1,12 @@
-apply plugin: "osgi"
 apply plugin: "license"
 
-jar {
+/*jar {
     manifest {
         instruction "Require-Capability",
                 "osgi.serviceloader; filter:=\"(osgi.serviceloader=com.github.tsouza.promises.spi.DeferredManager)\";cardinality:=multiple",
                 "osgi.extender; filter:=\"(osgi.extender=osgi.serviceloader.processor)\""
     }
-}
+}*/
 
 buildscript {
     repositories {

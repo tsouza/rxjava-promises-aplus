@@ -1,13 +1,12 @@
-apply plugin: "osgi"
 apply plugin: "license"
 
-jar {
+/*jar {
     manifest {
         instruction "Require-Capability", "osgi.extender; filter:=\"(osgi.extender=osgi.serviceloader.registrar)\""
         instruction "Provide-Capability", "osgi.serviceloader; osgi.serviceloader=com.github.tsouza.promises.spi.DeferredManager"
         instruction "Export-Package", "!com.github.tsouza.promises.internal.*", "*"
     }
-}
+}*/
 
 dependencies {
     compile project(":rxjava-promises-api")
