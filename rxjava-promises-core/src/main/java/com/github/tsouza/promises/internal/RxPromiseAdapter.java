@@ -104,7 +104,12 @@ public class RxPromiseAdapter<R> implements Promise<R> {
             if (finallyPromise == null)
                 return rxPromise;
             RxObserverAdapter<R> newPromise = new RxObserverAdapter<>();
-            finallyPromise.done(success -> newPromise.fulfill(rxPromise.getResult()),
+            finallyPromise.done(success -> {
+                        if (rxPromise.isFulfilled())
+                            newPromise.fulfill(rxPromise.getResult());
+                        else
+                            newPromise.reject(rxPromise.getReason());
+                    },
                     newPromise::reject);
             return newPromise;
         }));

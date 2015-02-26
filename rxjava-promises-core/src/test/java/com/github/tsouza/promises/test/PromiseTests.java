@@ -35,6 +35,7 @@ import static com.google.common.util.concurrent.Futures.immediateFailedFuture;
 import static com.google.common.util.concurrent.Futures.immediateFuture;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PromiseTests {
 
@@ -195,6 +196,20 @@ public class PromiseTests {
         assertEquals((Object) 6,
                 reduce(asList(1, 2, 3), (Integer p, Integer c) -> value(p + c), 0).
                         future().get());
+    }
+
+    @Test
+    public void testAlwaysReturningPromise() throws ExecutionException, InterruptedException {
+        AtomicBoolean wasRejected = new AtomicBoolean(false);
+        Promise<Object> rejectedPromise = reject(new RuntimeException());
+
+        defer(resolver -> resolver.chain(rejectedPromise)).
+                always(() -> resolve((Object) null)).
+                done(s -> wasRejected.set(false), f -> wasRejected.set(true));
+
+        Thread.sleep(100);
+
+        assertTrue(wasRejected.get());
     }
 
     private void assertFulfillment(Promise<Boolean> promise, boolean expected) throws ExecutionException, InterruptedException {
