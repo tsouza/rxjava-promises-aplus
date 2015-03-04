@@ -27,7 +27,7 @@ Example for Maven:
     <repositories>
         <repository>
           <id>sonatype</id>
-          <url>https://oss.sonatype.org/content/groups/public/</url>
+          <url>https://oss.sonatype.org/content/repositories/releases</url>
         </repository>
     </repositories>
 </project>
@@ -36,7 +36,7 @@ Example for Maven:
 and for Gradle:
 ```groovy
 repositories {
-    maven { url 'http://repository.sonatype.org/content/groups/public/' }
+    maven { url 'https://oss.sonatype.org/content/repositories/releases' }
 }
 
 dependency {
