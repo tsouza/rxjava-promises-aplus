@@ -40,7 +40,7 @@ repositories {
 }
 
 dependency {
-    compile "com.github.tsouza.promises:rxjava-promises-core:1.0.0-rc.5"
+    compile "com.github.tsouza.promises:rxjava-promises-core:1.0.0"
 }
 ```
 
